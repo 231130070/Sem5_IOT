@@ -3,158 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <title>Smart Plant Green House</title>
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #e8f5e9;
       margin: 0;
-      padding: 20px;
-      text-align: center;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(to bottom, #a5d6a7, #dcedc8);
+      min-height: 100vh;
+      padding: 0;
     }
-    h2, h1 {
+
+    header {
+      background: linear-gradient(to right, #66bb6a, #43a047);
+      padding: 30px;
+      text-align: center;
+      color: white;
+      font-size: 32px;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: 30px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .icon {
+      width: 50px;
+      margin-bottom: 10px;
+    }
+
+    .value {
+      font-size: 38px;
+      font-weight: bold;
       color: #2e7d32;
     }
-    .card {
-      background: #ffffff;
-      padding: 20px;
-      margin: 15px auto;
-      width: 300px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    button {
-      background: #2e7d32;
+
+    .status {
+      margin-top: 8px;
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
       color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
+      font-size: 14px;
     }
-    button:hover {
-      background: #1b5e20;
+
+    .good { background: #66bb6a; }
+    .warn { background: #ffa726; }
+    .bad  { background: #ef5350; }
+
+    .progress {
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      margin-top: 12px;
+      overflow: hidden;
     }
-    input {
-      padding: 10px;
-      margin: 8px;
-      width: 250px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+
+    .progress-bar {
+      height: 100%;
+      background: #66bb6a;
+      width: 50%;
     }
   </style>
 </head>
-
 <body>
 
-  <!-- LOGIN FORM -->
-  <div id="loginForm">
-    <h2>Smart Plant Green House</h2>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button id="loginBtn">Login</button>
+<header>🌱 Smart Plant Green House</header>
+
+<div class="container">
+
+  <!-- Soil Moisture -->
+  <div class="card">
+    <img class="icon" src="https://img.icons8.com/fluency/96/wet.png">
+    <h3>Kelembaban Tanah</h3>
+    <div class="value" id="soilValue">70%</div>
+    <div class="status good" id="soilStatus">Cukup</div>
+
+    <div class="progress">
+      <div class="progress-bar" id="soilBar" style="width:70%"></div>
+    </div>
   </div>
 
-  <!-- DASHBOARD -->
-  <div id="dashboard" style="display:none;">
-    <h1>Dashboard</h1>
+  <!-- Light Level -->
+  <div class="card">
+    <img class="icon" src="https://img.icons8.com/fluency/96/sun.png">
+    <h3>Tingkat Cahaya</h3>
+    <div class="value" id="lightValue">80%</div>
+    <div class="status good" id="lightStatus">Terang</div>
 
-    <div class="card">
-      <h3>Kelembaban Tanah</h3>
-      <div id="soilMoisture">-- %</div>
-      <span id="soilStatus"></span>
+    <div class="progress">
+      <div class="progress-bar" id="lightBar" style="width:80%"></div>
     </div>
-
-    <div class="card">
-      <h3>Tingkat Cahaya</h3>
-      <div id="lightLevel">-- %</div>
-      <span id="lightStatus"></span>
-    </div>
-
-    <div class="card">
-      <h3>Gerakan (PIR)</h3>
-      <div id="motion">--</div>
-      <span id="motionStatus"></span>
-    </div>
-
-    <button id="logoutBtn">Logout</button>
   </div>
 
-  <!-- FIREBASE SCRIPT -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+  <!-- Motion -->
+  <div class="card">
+    <img class="icon" src="https://img.icons8.com/fluency/96/motion-sensor.png">
+    <h3>Gerakan (PIR)</h3>
+    <div class="value" id="motionValue">Ada</div>
+    <div class="status bad" id="motionStatus">Terdeteksi</div>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA8D-7d0go1eLJ-vGHd0hZD3gcf1kS29ig",
-      authDomain: "internetofthingsmikro.firebaseapp.com",
-      databaseURL: "https://internetofthingsmikro-default-rtdb.firebaseio.com",
-      projectId: "internetofthingsmikro",
-      storageBucket: "internetofthingsmikro.firebasestorage.app",
-      messagingSenderId: "216022709376",
-      appId: "1:216022709376:web:66c98abddaba295078a265"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-
-    const loginForm = document.getElementById("loginForm");
-    const dashboard = document.getElementById("dashboard");
-
-    document.getElementById("loginBtn").addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const pass = document.getElementById("password").value;
-
-      signInWithEmailAndPassword(auth, email, pass)
-        .then(() => {
-          loginForm.style.display = "none";
-          dashboard.style.display = "block";
-          listenToSensors();
-        })
-        .catch(err => alert("Login gagal: " + err.message));
-    });
-
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth).then(() => {
-        dashboard.style.display = "none";
-        loginForm.style.display = "block";
-      });
-    });
-
-    function listenToSensors() {
-      const sensorRef = ref(db, "greenhouse/sensors");
-
-      onValue(sensorRef, (snapshot) => {
-        const d = snapshot.val() || {};
-
-        updateSoil(d.soilMoisture);
-        updateLight(d.lightLevel);
-        updateMotion(d.motion);
-      });
-    }
-
-    function updateSoil(value) {
-      document.getElementById("soilMoisture").innerText = value + " %";
-      document.getElementById("soilStatus").innerText =
-        value < 30 ? "Kering" :
-        value < 70 ? "Cukup" :
-                      "Basah";
-    }
-
-    function updateLight(value) {
-      document.getElementById("lightLevel").innerText = value + " %";
-      document.getElementById("lightStatus").innerText =
-        value < 30 ? "Redup" :
-        value < 70 ? "Cukup" :
-                      "Terang";
-    }
-
-    function updateMotion(value) {
-      document.getElementById("motion").innerText = value ? "Terdeteksi" : "Tidak Terdeteksi";
-      document.getElementById("motionStatus").innerText = value ? "Ada Gerakan" : "Aman";
-    }
-  </script>
+</div>
 
 </body>
 </html>
