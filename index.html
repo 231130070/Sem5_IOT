@@ -81,14 +81,10 @@
 
   <!-- FIREBASE SCRIPT -->
   <script type="module">
-    // IMPORT FIREBASE SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-    // --------------------------------------------------------
-    // 🔥 MASUKKAN CONFIG FIREBASE KAMU DI SINI !!!
-    // --------------------------------------------------------
     const firebaseConfig = {
       apiKey: "AIzaSyA8D-7d0go1eLJ-vGHd0hZD3gcf1kS29ig",
       authDomain: "internetofthingsmikro.firebaseapp.com",
@@ -98,9 +94,7 @@
       messagingSenderId: "216022709376",
       appId: "1:216022709376:web:66c98abddaba295078a265"
     };
-    // --------------------------------------------------------
 
-    // INIT FIREBASE
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getDatabase(app);
@@ -108,7 +102,6 @@
     const loginForm = document.getElementById("loginForm");
     const dashboard = document.getElementById("dashboard");
 
-    // LOGIN
     document.getElementById("loginBtn").addEventListener("click", () => {
       const email = document.getElementById("email").value;
       const pass = document.getElementById("password").value;
@@ -122,7 +115,6 @@
         .catch(err => alert("Login gagal: " + err.message));
     });
 
-    // LOGOUT
     document.getElementById("logoutBtn").addEventListener("click", () => {
       signOut(auth).then(() => {
         dashboard.style.display = "none";
@@ -130,7 +122,6 @@
       });
     });
 
-    // LISTEN SENSOR DATA
     function listenToSensors() {
       const sensorRef = ref(db, "greenhouse/sensors");
 
@@ -143,7 +134,6 @@
       });
     }
 
-    // UPDATE UI - SOIL
     function updateSoil(value) {
       document.getElementById("soilMoisture").innerText = value + " %";
       document.getElementById("soilStatus").innerText =
@@ -152,7 +142,6 @@
                       "Basah";
     }
 
-    // UPDATE UI - LIGHT
     function updateLight(value) {
       document.getElementById("lightLevel").innerText = value + " %";
       document.getElementById("lightStatus").innerText =
@@ -161,7 +150,6 @@
                       "Terang";
     }
 
-    // UPDATE UI - MOTION
     function updateMotion(value) {
       document.getElementById("motion").innerText = value ? "Terdeteksi" : "Tidak Terdeteksi";
       document.getElementById("motionStatus").innerText = value ? "Ada Gerakan" : "Aman";
