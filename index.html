@@ -13,6 +13,7 @@
       padding: 0;
     }
 
+    /* HEADER */
     header {
       background: linear-gradient(to right, #66bb6a, #43a047);
       padding: 30px;
@@ -21,6 +22,39 @@
       font-size: 32px;
       font-weight: 600;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* LOGIN FORM */
+    #loginForm {
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    #loginForm input {
+      display: block;
+      margin: 10px auto;
+      width: 260px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #999;
+    }
+
+    #loginForm button {
+      padding: 12px 24px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #loginForm button:hover {
+      background: #1b5e20;
+    }
+
+    /* DASHBOARD */
+    #dashboard {
+      display: none;
     }
 
     .container {
@@ -82,35 +116,58 @@
       background: #66bb6a;
       width: 50%;
     }
+
+    #logoutBtn {
+      margin: 20px auto;
+      display: block;
+      padding: 12px 24px;
+      background: #c62828;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #logoutBtn:hover {
+      background: #8e0000;
+    }
   </style>
 </head>
 <body>
+
+<!-- LOGIN PAGE -->
+<div id="loginForm">
+    <h2>Login Smart Plant Dashboard</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="loginBtn">Login</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
 
 <header>🌱 Smart Plant Green House</header>
 
 <div class="container">
 
-  <!-- Soil Moisture -->
+  <!-- Soil -->
   <div class="card">
     <img class="icon" src="https://img.icons8.com/fluency/96/wet.png">
     <h3>Kelembaban Tanah</h3>
-    <div class="value" id="soilValue">70%</div>
-    <div class="status good" id="soilStatus">Cukup</div>
-
+    <div class="value" id="soilValue">--%</div>
+    <div class="status" id="soilStatus">-</div>
     <div class="progress">
-      <div class="progress-bar" id="soilBar" style="width:70%"></div>
+      <div class="progress-bar" id="soilBar"></div>
     </div>
   </div>
 
-  <!-- Light Level -->
+  <!-- Light -->
   <div class="card">
     <img class="icon" src="https://img.icons8.com/fluency/96/sun.png">
     <h3>Tingkat Cahaya</h3>
-    <div class="value" id="lightValue">80%</div>
-    <div class="status good" id="lightStatus">Terang</div>
-
+    <div class="value" id="lightValue">--%</div>
+    <div class="status" id="lightStatus">-</div>
     <div class="progress">
-      <div class="progress-bar" id="lightBar" style="width:80%"></div>
+      <div class="progress-bar" id="lightBar"></div>
     </div>
   </div>
 
@@ -118,11 +175,99 @@
   <div class="card">
     <img class="icon" src="https://img.icons8.com/fluency/96/motion-sensor.png">
     <h3>Gerakan (PIR)</h3>
-    <div class="value" id="motionValue">Ada</div>
-    <div class="status bad" id="motionStatus">Terdeteksi</div>
+    <div class="value" id="motionValue">--</div>
+    <div class="status" id="motionStatus">-</div>
   </div>
 
 </div>
+
+<button id="logoutBtn">Logout</button>
+
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "ISI PUNYAMU",
+      authDomain: "ISI PUNYAMU",
+      databaseURL: "ISI PUNYAMU",
+      projectId: "ISI PUNYAMU",
+      storageBucket: "ISI PUNYAMU",
+      messagingSenderId: "ISI PUNYAMU",
+      appId: "ISI PUNYAMU"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const loginForm = document.getElementById("loginForm");
+    const dashboard = document.getElementById("dashboard");
+
+    // LOGIN
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      const pass = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, pass)
+        .then(() => {
+          loginForm.style.display = "none";
+          dashboard.style.display = "block";
+          loadSensors();
+        })
+        .catch(err => alert("Login gagal: " + err.message));
+    });
+
+    // LOGOUT
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        dashboard.style.display = "none";
+        loginForm.style.display = "block";
+      });
+    });
+
+    // LISTEN SENSOR
+    function loadSensors() {
+      const sensorRef = ref(db, "greenhouse/sensors");
+      onValue(sensorRef, snap => {
+        const d = snap.val() || {};
+        updateSoil(d.soilMoisture);
+        updateLight(d.lightLevel);
+        updateMotion(d.motion);
+      });
+    }
+
+    function updateSoil(val) {
+      document.getElementById("soilValue").innerText = val + "%";
+      document.getElementById("soilBar").style.width = val + "%";
+
+      let status = document.getElementById("soilStatus");
+      if (val < 30) { status.innerText = "Kering"; status.className="status bad"; }
+      else if (val < 70) { status.innerText = "Cukup"; status.className="status warn"; }
+      else { status.innerText = "Basah"; status.className="status good"; }
+    }
+
+    function updateLight(val) {
+      document.getElementById("lightValue").innerText = val + "%";
+      document.getElementById("lightBar").style.width = val + "%";
+
+      let status = document.getElementById("lightStatus");
+      if (val < 30) { status.innerText = "Redup"; status.className="status bad"; }
+      else if (val < 70) { status.innerText = "Cukup"; status.className="status warn"; }
+      else { status.innerText = "Terang"; status.className="status good"; }
+    }
+
+    function updateMotion(val) {
+      document.getElementById("motionValue").innerText = val ? "Ada" : "Tidak Ada";
+      let status = document.getElementById("motionStatus");
+      if (val) { status.innerText = "Terdeteksi"; status.className="status bad"; }
+      else { status.innerText = "Aman"; status.className="status good"; }
+    }
+</script>
 
 </body>
 </html>
