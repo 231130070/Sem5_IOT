@@ -1,275 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Smart Plant Green House</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Firebase Login + Dashboard</title>
+
+<!-- Bootstrap Icons (ikon PIR dari CDN) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 <style>
-  body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background: #e8f5e9;
-  }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #a8e6ff, #2b65ff);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-  /* LOGIN PAGE */
-  #loginForm {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background: linear-gradient(135deg, #a5d6a7, #81c784);
-  }
+    /* LOGIN CARD */
+    #login-page {
+        width: 350px;
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        display: block;
+        animation: fadeIn 0.4s ease;
+    }
 
-  #loginCard {
-    background: white;
-    padding: 35px;
-    width: 320px;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    text-align: center;
-  }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-  #loginCard h2 {
-    margin-bottom: 20px;
-    color: #2e7d32;
-  }
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
 
-  input {
-    width: 92%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: 1px solid #bbb;
-    font-size: 14px;
-  }
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #2b65ff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+    }
 
-  button {
-    padding: 12px 20px;
-    background: #2e7d32;
-    border: none;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    margin-top: 10px;
-  }
+    button:hover {
+        background: #1f4dcc;
+    }
 
-  button:hover {
-    background: #1b5e20;
-  }
+    /* DASHBOARD */
+    #dashboard {
+        display: none;
+        text-align: center;
+        color: white;
+    }
 
-  /* DASHBOARD */
-  #dashboard {
-    display: none;
-    padding-bottom: 60px;
-  }
+    .card {
+        width: 300px;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin: auto;
+        color: black;
+    }
 
-  header {
-    background: linear-gradient(to right, #66bb6a, #43a047);
-    padding: 25px;
-    text-align: center;
-    font-size: 30px;
-    font-weight: 600;
-    color: white;
-  }
+    .icon-big {
+        font-size: 70px;
+        color: #2b65ff;
+    }
 
-  .container {
-    width: 90%;
-    max-width: 1100px;
-    margin: 35px auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-  }
-
-  .card {
-    background: white;
-    padding: 25px;
-    border-radius: 18px;
-    text-align: center;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    transition: 0.2s ease;
-  }
-
-  .card:hover {
-    transform: scale(1.02);
-  }
-
-  .icon {
-    width: 55px;
-    margin-bottom: 10px;
-  }
-
-  .value {
-    font-size: 36px;
-    font-weight: bold;
-    color: #2e7d32;
-  }
-
-  .status {
-    margin-top: 10px;
-    display: inline-block;
-    padding: 8px 18px;
-    border-radius: 20px;
-    color: white;
-    font-size: 13px;
-  }
-
-  .good { background: #66bb6a; }
-  .warn { background: #ffa726; }
-  .bad  { background: #ef5350; }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
 </style>
 </head>
 
 <body>
 
 <!-- LOGIN PAGE -->
-<div id="loginForm">
-  <div id="loginCard">
-    <h2>Smart Plant Green House</h2>
+<div id="login-page">
+    <h2>Login</h2>
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
-    <button id="loginBtn">Login</button>
-  </div>
+    <button onclick="login()">Login</button>
 </div>
 
-<!-- DASHBOARD -->
+<!-- DASHBOARD PAGE -->
 <div id="dashboard">
-  <header>🌱 Smart Plant Green House</header>
-
-  <div class="container">
-
-    <!-- Soil -->
+    <h1>Dashboard</h1>
     <div class="card">
-      <img class="icon" src="https://img.icons8.com/fluency/96/wet.png">
-      <h3>Kelembaban Tanah</h3>
-      <div id="soilValue" class="value">--%</div>
-      <div id="soilStatus" class="status good">-</div>
+        <i class="bi bi-eye-fill icon-big"></i>
+        <h3>PIR Sensor Active</h3>
+        <p>Status: <span id="pir-status">Loading…</span></p>
     </div>
 
-    <!-- Light -->
-    <div class="card">
-      <img class="icon" src="https://img.icons8.com/fluency/96/sun.png">
-      <h3>Tingkat Cahaya</h3>
-      <div id="lightValue" class="value">--%</div>
-      <div id="lightStatus" class="status good">-</div>
-    </div>
-
-    <!-- PIR -->
-    <div class="card">
-      <img class="icon" src="https://img.icons8.com/fluency/96/motion-sensor.png">
-      <h3>Gerakan (PIR)</h3>
-      <div id="motionValue" class="value">-</div>
-      <div id="motionStatus" class="status good">-</div>
-    </div>
-
-  </div>
-
-  <center>
-    <button id="logoutBtn">Logout</button>
-  </center>
+    <br>
+    <button style="background:red" onclick="logout()">Logout</button>
 </div>
 
-
-<!-- FIREBASE SCRIPT -->
+<!-- Firebase -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyA8D-7d0go1eLJ-vGHd0hZD3gcf1kS29ig",
-    authDomain: "internetofthingsmikro.firebaseapp.com",
-    databaseURL: "https://internetofthingsmikro-default-rtdb.firebaseio.com",
-    projectId: "internetofthingsmikro",
-    storageBucket: "internetofthingsmikro.firebasestorage.app",
-    messagingSenderId: "216022709376",
-    appId: "1:216022709376:web:66c98abddaba295078a265"
-  };
+    // === YOUR FIREBASE CONFIG (dari versi sebelumnya, sudah sesuai permintaan) ===
+    const firebaseConfig = {
+        apiKey: "AIzaSyC6h_ooluy6CU9yOS32H3u8C3_rWgRh9AE",
+        authDomain: "pir-test-f8b60.firebaseapp.com",
+        databaseURL: "https://pir-test-f8b60-default-rtdb.firebaseio.com/",
+        projectId: "pir-test-f8b60",
+        storageBucket: "pir-test-f8b60.appspot.com",
+        messagingSenderId: "494945326462",
+        appId: "1:494945326462:web:cc0bc85e9cb3ed998aa960"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
+    // Init Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
 
-  const loginForm = document.getElementById("loginForm");
-  const dashboard = document.getElementById("dashboard");
+    // LOGIN FUNCTION
+    window.login = function () {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-  document.getElementById("loginBtn").addEventListener("click", () => {
-    const email = document.getElementById("email").value;
-    const pass = document.getElementById("password").value;
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                document.getElementById("login-page").style.display = "none";
+                document.getElementById("dashboard").style.display = "block";
 
-    signInWithEmailAndPassword(auth, email, pass)
-      .then(() => {
-        loginForm.style.display = "none";
-        dashboard.style.display = "block";
-        fetchSensors();
-      })
-      .catch(err => alert("Login gagal: " + err.message));
-  });
+                const pirRef = ref(db, "pir/value");
+                onValue(pirRef, (snapshot) => {
+                    document.getElementById("pir-status").innerText = snapshot.val();
+                });
+            })
+            .catch((error) => alert("Login gagal: " + error.message));
+    };
 
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    signOut(auth).then(() => {
-      dashboard.style.display = "none";
-      loginForm.style.display = "flex";
-    });
-  });
-
-  function fetchSensors() {
-    const sensorRef = ref(db, "sensor");
-
-    onValue(sensorRef, (snapshot) => {
-      const data = snapshot.val() || {};
-
-      updateSoil(data.soil);
-      updateLight(data.light);
-      updateMotion(data.pir);
-    });
-  }
-
-  function updateSoil(val) {
-    document.getElementById("soilValue").innerText = val + "%";
-    const status = document.getElementById("soilStatus");
-
-    if (val < 30) {
-      status.innerText = "Kering";
-      status.className = "status warn";
-    } else if (val < 70) {
-      status.innerText = "Cukup";
-      status.className = "status good";
-    } else {
-      status.innerText = "Basah";
-      status.className = "status good";
-    }
-  }
-
-  function updateLight(val) {
-    document.getElementById("lightValue").innerText = val + "%";
-    const status = document.getElementById("lightStatus");
-
-    if (val < 30) {
-      status.innerText = "Redup";
-      status.className = "status warn";
-    } else if (val < 70) {
-      status.innerText = "Cukup";
-      status.className = "status good";
-    } else {
-      status.innerText = "Terang";
-      status.className = "status good";
-    }
-  }
-
-  function updateMotion(val) {
-    document.getElementById("motionValue").innerText = val ? "Ada Gerakan" : "Tidak Ada";
-    const status = document.getElementById("motionStatus");
-
-    if (val) {
-      status.innerText = "Terdeteksi";
-      status.className = "status bad";
-    } else {
-      status.innerText = "Aman";
-      status.className = "status good";
-    }
-  }
+    // LOGOUT FUNCTION
+    window.logout = function () {
+        signOut(auth).then(() => location.reload());
+    };
 </script>
 
 </body>
