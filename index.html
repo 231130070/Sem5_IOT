@@ -1,188 +1,147 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Smart Plant Green House</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IoT Dashboard</title>
 
 <style>
-    body {
-        font-family: Arial;
-        background: #e6ffd9;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-    }
+    body { margin: 0; font-family: Arial; background: #f1f1f1; }
+    .page { display: none; padding: 20px; }
 
-    /* LOGIN PAGE */
+    /* LOGIN */
     #loginPage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 80px;
+    }
+    #loginBox {
+        background: #fff;
+        padding: 20px;
         width: 300px;
-        margin: 100px auto;
-        padding: 25px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
     }
-
     input {
-        width: 90%;
+        width: 100%;
         padding: 10px;
-        margin: 8px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-    }
-
-    button {
-        width: 95%;
-        padding: 10px;
-        background: #28a745;
-        color: white;
-        border-radius: 8px;
-        border: none;
         margin-top: 10px;
+        border-radius: 6px;
+        border: 1px solid #aaa;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        background: #2b7cff;
+        color: #fff;
+        margin-top: 10px;
+        border-radius: 6px;
         cursor: pointer;
     }
 
-    #dashboardPage {
-        display: none;
-        padding: 20px;
-    }
-
-    .title {
-        font-size: 28px;
-        margin-top: 20px;
-        font-weight: bold;
-    }
-
-    .card-container {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 40px;
-        flex-wrap: wrap;
-    }
-
+    /* DASHBOARD */
+    #dashboardPage { padding: 20px; }
     .card {
-        width: 250px;
-        padding: 20px;
         background: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    #logoutBtn {
-        background: red;
-        margin-top: 40px;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 8px #ccc;
     }
 </style>
-
-<script type="module">
-/* --------------------- FIREBASE CONFIG ---------------------- */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { 
-    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut 
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-import { 
-    getDatabase, ref, onValue 
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-// GANTI BAGIAN INI DENGAN PUNYA KAMU!!
-const firebaseConfig = {
-    apiKey: "AIzaSyA8D-7d0go1eLJ-vGHd0hZD3gcf1kS29ig",
-    authDomain: "internetofthingsmikro.firebaseapp.com",
-    databaseURL: "https://internetofthingsmikro-default-rtdb.firebaseio.com",
-    projectId: "internetofthingsmikro",
-    storageBucket: "internetofthingsmikro.firebasestorage.app",
-    messagingSenderId: "216022709376",
-    appId: "1:216022709376:web:66c98abddaba295078a265"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
-
-/* --------------------- LOGIN FUNCTION ---------------------- */
-loginBtn.onclick = function () {
-    const email = document.getElementById("email").value;
-    const pass = document.getElementById("password").value;
-
-    signInWithEmailAndPassword(auth, email, pass)
-        .then(() => {
-            console.log("Login sukses");
-        })
-        .catch(err => {
-            document.getElementById("errorMsg").innerText = err.message;
-        });
-};
-
-/* --------------------- SESSION CHECK ---------------------- */
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        loginPage.style.display = "none";
-        dashboardPage.style.display = "block";
-        loadSensorData();
-    } else {
-        dashboardPage.style.display = "none";
-        loginPage.style.display = "block";
-    }
-});
-
-/* --------------------- LOAD SENSOR DATA ---------------------- */
-function loadSensorData() {
-    onValue(ref(db, "sensor/soil"), snap => {
-        document.getElementById("soil").innerText = snap.val() + "%";
-    });
-
-    onValue(ref(db, "sensor/light"), snap => {
-        document.getElementById("light").innerText = snap.val() + "%";
-    });
-
-    onValue(ref(db, "sensor/pir"), snap => {
-        document.getElementById("pir").innerText = snap.val() === 1 ? "Ada" : "Tidak Ada";
-    });
-}
-
-/* --------------------- LOGOUT ---------------------- */
-logoutBtn.onclick = () => {
-    signOut(auth);
-};
-</script>
 
 </head>
 <body>
 
-<!-- --------------------- LOGIN PAGE ---------------------- -->
-<div id="loginPage">
-    <h2>Login</h2>
-    <input id="email" type="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
-    <button id="loginBtn">Login</button>
-    <p id="errorMsg" style="color:red;"></p>
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="page" style="display:block;">
+    <div id="loginBox">
+        <h2>Login</h2>
+        <input type="text" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button id="loginBtn">Login</button>
+        <p id="loginError" style="color:red;"></p>
+    </div>
 </div>
 
-<!-- --------------------- DASHBOARD ---------------------- -->
-<div id="dashboardPage">
-    <h1 class="title">Smart Plant Green House</h1>
+<!-- DASHBOARD PAGE -->
+<div id="dashboardPage" class="page">
+    <h2>IoT Sensor Dashboard</h2>
 
-    <div class="card-container">
-        <div class="card">
-            <h3>Kelembaban Tanah</h3>
-            <p id="soil">Loading...</p>
-        </div>
-
-        <div class="card">
-            <h3>Tingkat Cahaya</h3>
-            <p id="light">Loading...</p>
-        </div>
-
-        <div class="card">
-            <h3>Gerakan (PIR)</h3>
-            <p id="pir">Loading...</p>
-        </div>
+    <div class="card">
+        <h3>Soil Moisture:</h3>
+        <p id="soilValue">Loading...</p>
     </div>
 
-    <button id="logoutBtn">Logout</button>
+    <div class="card">
+        <h3>Light Level:</h3>
+        <p id="lightValue">Loading...</p>
+    </div>
+
+    <div class="card">
+        <h3>PIR (Motion):</h3>
+        <p id="pirValue">Loading...</p>
+    </div>
 </div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+
+<script>
+// ===========================
+// FIREBASE CONFIG (FINAL, SUDAH SESUAI punyamu)
+// ===========================
+const firebaseConfig = {
+    apiKey: "AIzaSyBL3jO5vXz7Z6VAvzqVvpp0E9qcDJZr3z4",
+    authDomain: "internetofthingsmikro.firebaseapp.com",
+    databaseURL: "https://internetofthingsmikro-default-rtdb.firebaseio.com",
+    projectId: "internetofthingsmikro",
+    storageBucket: "internetofthingsmikro.appspot.com",
+    messagingSenderId: "78291597447",
+    appId: "1:78291597447:web:c2ea3a88e4d4e2a55f844b"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+// ===========================
+// LOGIN HANDLER
+// ===========================
+document.getElementById("loginBtn").addEventListener("click", function () {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(() => {
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("dashboardPage").style.display = "block";
+        loadSensorData();
+    })
+    .catch(err => {
+        document.getElementById("loginError").innerText = err.message;
+    });
+});
+
+// ===========================
+// LOAD SENSOR DATA FROM REALTIME DB
+// ===========================
+function loadSensorData() {
+    const db = firebase.database().ref("sensor");
+
+    db.on("value", snapshot => {
+        const data = snapshot.val();
+        if (!data) return;
+
+        document.getElementById("soilValue").innerText = data.soil + " %";
+        document.getElementById("lightValue").innerText = data.light + " lux";
+        document.getElementById("pirValue").innerText = 
+            data.pir == 1 ? "Motion Detected" : "No Motion";
+    });
+}
+</script>
 
 </body>
 </html>
