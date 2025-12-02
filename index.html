@@ -3,45 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <title>Smart Plant Green House</title>
-
 <style>
   body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(to bottom, #a5d6a7, #dcedc8);
     margin: 0;
-    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background: #e8f5e9;
   }
 
-  header {
-    background: linear-gradient(to right, #66bb6a, #43a047);
-    padding: 30px;
-    text-align: center;
-    color: white;
-    font-size: 32px;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-
+  /* LOGIN PAGE */
   #loginForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #a5d6a7, #81c784);
+  }
+
+  #loginCard {
+    background: white;
+    padding: 35px;
+    width: 320px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     text-align: center;
-    margin-top: 80px;
+  }
+
+  #loginCard h2 {
+    margin-bottom: 20px;
+    color: #2e7d32;
   }
 
   input {
-    padding: 10px;
-    margin: 8px;
-    width: 250px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    width: 92%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    font-size: 14px;
   }
 
   button {
+    padding: 12px 20px;
     background: #2e7d32;
-    padding: 10px 20px;
+    border: none;
     color: white;
     border-radius: 8px;
     cursor: pointer;
-    border: none;
+    font-size: 15px;
     margin-top: 10px;
   }
 
@@ -49,10 +58,25 @@
     background: #1b5e20;
   }
 
+  /* DASHBOARD */
+  #dashboard {
+    display: none;
+    padding-bottom: 60px;
+  }
+
+  header {
+    background: linear-gradient(to right, #66bb6a, #43a047);
+    padding: 25px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    color: white;
+  }
+
   .container {
     width: 90%;
     max-width: 1100px;
-    margin: 30px auto;
+    margin: 35px auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 20px;
@@ -61,9 +85,9 @@
   .card {
     background: white;
     padding: 25px;
+    border-radius: 18px;
     text-align: center;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     transition: 0.2s ease;
   }
 
@@ -72,75 +96,80 @@
   }
 
   .icon {
-    width: 50px;
+    width: 55px;
+    margin-bottom: 10px;
   }
 
   .value {
-    font-size: 35px;
+    font-size: 36px;
     font-weight: bold;
     color: #2e7d32;
   }
 
   .status {
+    margin-top: 10px;
     display: inline-block;
-    margin-top: 8px;
-    padding: 6px 15px;
+    padding: 8px 18px;
     border-radius: 20px;
     color: white;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .good { background: #66bb6a; }
   .warn { background: #ffa726; }
   .bad  { background: #ef5350; }
-
-  #logoutBtn {
-    margin: 30px auto;
-    display: block;
-  }
 </style>
 </head>
+
 <body>
 
 <!-- LOGIN PAGE -->
 <div id="loginForm">
-  <h2>Smart Plant Green House</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
+  <div id="loginCard">
+    <h2>Smart Plant Green House</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="loginBtn">Login</button>
+  </div>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard" style="display:none;">
+<div id="dashboard">
   <header>🌱 Smart Plant Green House</header>
 
   <div class="container">
 
+    <!-- Soil -->
     <div class="card">
       <img class="icon" src="https://img.icons8.com/fluency/96/wet.png">
       <h3>Kelembaban Tanah</h3>
-      <div class="value" id="soilValue">--%</div>
-      <div class="status" id="soilStatus">--</div>
+      <div id="soilValue" class="value">--%</div>
+      <div id="soilStatus" class="status good">-</div>
     </div>
 
+    <!-- Light -->
     <div class="card">
       <img class="icon" src="https://img.icons8.com/fluency/96/sun.png">
       <h3>Tingkat Cahaya</h3>
-      <div class="value" id="lightValue">--%</div>
-      <div class="status" id="lightStatus">--</div>
+      <div id="lightValue" class="value">--%</div>
+      <div id="lightStatus" class="status good">-</div>
     </div>
 
+    <!-- PIR -->
     <div class="card">
       <img class="icon" src="https://img.icons8.com/fluency/96/motion-sensor.png">
       <h3>Gerakan (PIR)</h3>
-      <div class="value" id="motionValue">--</div>
-      <div class="status" id="motionStatus">--</div>
+      <div id="motionValue" class="value">-</div>
+      <div id="motionStatus" class="status good">-</div>
     </div>
 
   </div>
 
-  <button id="logoutBtn">Logout</button>
+  <center>
+    <button id="logoutBtn">Logout</button>
+  </center>
 </div>
+
 
 <!-- FIREBASE SCRIPT -->
 <script type="module">
@@ -148,7 +177,6 @@
   import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
   import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-  // FIREBASE CONFIG MU (VALID)
   const firebaseConfig = {
     apiKey: "AIzaSyA8D-7d0go1eLJ-vGHd0hZD3gcf1kS29ig",
     authDomain: "internetofthingsmikro.firebaseapp.com",
@@ -166,7 +194,6 @@
   const loginForm = document.getElementById("loginForm");
   const dashboard = document.getElementById("dashboard");
 
-  // LOGIN
   document.getElementById("loginBtn").addEventListener("click", () => {
     const email = document.getElementById("email").value;
     const pass = document.getElementById("password").value;
@@ -175,59 +202,73 @@
       .then(() => {
         loginForm.style.display = "none";
         dashboard.style.display = "block";
-        listenToSensors();
+        fetchSensors();
       })
       .catch(err => alert("Login gagal: " + err.message));
   });
 
-  // LOGOUT
   document.getElementById("logoutBtn").addEventListener("click", () => {
     signOut(auth).then(() => {
       dashboard.style.display = "none";
-      loginForm.style.display = "block";
+      loginForm.style.display = "flex";
     });
   });
 
-  // 🔥 AMBIL DATA DARI FIREBASE REALTIME DATABASE
-  function listenToSensors() {
-    const sensorRef = ref(db, "greenhouse/sensors");
+  function fetchSensors() {
+    const sensorRef = ref(db, "sensor");
 
     onValue(sensorRef, (snapshot) => {
-      const d = snapshot.val() || {};
+      const data = snapshot.val() || {};
 
-      updateSoil(d.soilMoisture);
-      updateLight(d.lightLevel);
-      updateMotion(d.motion);
+      updateSoil(data.soil);
+      updateLight(data.light);
+      updateMotion(data.pir);
     });
   }
 
-  // UPDATE CARD SOIL
-  function updateSoil(v) {
-    document.getElementById("soilValue").innerText = v + "%";
+  function updateSoil(val) {
+    document.getElementById("soilValue").innerText = val + "%";
     const status = document.getElementById("soilStatus");
 
-    if (v < 30) status.className = "status bad", status.innerText = "Kering";
-    else if (v < 70) status.className = "status warn", status.innerText = "Cukup";
-    else status.className = "status good", status.innerText = "Basah";
+    if (val < 30) {
+      status.innerText = "Kering";
+      status.className = "status warn";
+    } else if (val < 70) {
+      status.innerText = "Cukup";
+      status.className = "status good";
+    } else {
+      status.innerText = "Basah";
+      status.className = "status good";
+    }
   }
 
-  // UPDATE LIGHT
-  function updateLight(v) {
-    document.getElementById("lightValue").innerText = v + "%";
+  function updateLight(val) {
+    document.getElementById("lightValue").innerText = val + "%";
     const status = document.getElementById("lightStatus");
 
-    if (v < 30) status.className = "status bad", status.innerText = "Redup";
-    else if (v < 70) status.className = "status warn", status.innerText = "Normal";
-    else status.className = "status good", status.innerText = "Terang";
+    if (val < 30) {
+      status.innerText = "Redup";
+      status.className = "status warn";
+    } else if (val < 70) {
+      status.innerText = "Cukup";
+      status.className = "status good";
+    } else {
+      status.innerText = "Terang";
+      status.className = "status good";
+    }
   }
 
-  // UPDATE MOTION
-  function updateMotion(v) {
-    document.getElementById("motionValue").innerText = v ? "Terdeteksi" : "Tidak Ada";
+  function updateMotion(val) {
+    document.getElementById("motionValue").innerText = val ? "Ada Gerakan" : "Tidak Ada";
     const status = document.getElementById("motionStatus");
 
-    if (v) status.className = "status bad", status.innerText = "Ada Gerakan";
-    else status.className = "status good", status.innerText = "Aman";
+    if (val) {
+      status.innerText = "Terdeteksi";
+      status.className = "status bad";
+    } else {
+      status.innerText = "Aman";
+      status.className = "status good";
+    }
   }
 </script>
 
