@@ -1,143 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Smart Greenhouse</title>
-
-<!-- Bootstrap Icons untuk ikon PIR -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<meta charset="UTF-8">
+<title>Smart Plant Green House</title>
 
 <style>
-    body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: linear-gradient(135deg, #a8e6ff, #2b65ff);
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to bottom, #a5d6a7, #dcedc8);
+    margin: 0;
+    padding: 0;
+  }
 
-    /* LOGIN PAGE */
-    #login-page {
-        width: 350px;
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
+  header {
+    background: linear-gradient(to right, #66bb6a, #43a047);
+    padding: 30px;
+    text-align: center;
+    color: white;
+    font-size: 32px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
 
-    h2 { text-align: center; }
+  #loginForm {
+    text-align: center;
+    margin-top: 80px;
+  }
 
-    input {
-        width: 100%;
-        padding: 12px;
-        margin: 10px 0;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-    }
+  input {
+    padding: 10px;
+    margin: 8px;
+    width: 250px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
 
-    button {
-        width: 100%;
-        padding: 12px;
-        background: #2b65ff;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-    }
+  button {
+    background: #2e7d32;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+  }
 
-    button:hover { background: #1f4dcc; }
+  button:hover {
+    background: #1b5e20;
+  }
 
-    /* DASHBOARD */
-    #dashboard {
-        display: none;
-        text-align: center;
-        color: white;
-    }
+  .container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
 
-    .card {
-        width: 300px;
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        margin: auto;
-        color: black;
-    }
+  .card {
+    background: white;
+    padding: 25px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: 0.2s ease;
+  }
 
-    .icon-big { font-size: 70px; color: #2b65ff; }
+  .card:hover {
+    transform: scale(1.02);
+  }
+
+  .icon {
+    width: 50px;
+  }
+
+  .value {
+    font-size: 35px;
+    font-weight: bold;
+    color: #2e7d32;
+  }
+
+  .status {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 15px;
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+  }
+
+  .good { background: #66bb6a; }
+  .warn { background: #ffa726; }
+  .bad  { background: #ef5350; }
+
+  #logoutBtn {
+    margin: 30px auto;
+    display: block;
+  }
 </style>
 </head>
-
 <body>
 
 <!-- LOGIN PAGE -->
-<div id="login-page">
-    <h2>Login</h2>
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
+<div id="loginForm">
+  <h2>Smart Plant Green House</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button id="loginBtn">Login</button>
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard">
-    <h1>Dashboard</h1>
+<div id="dashboard" style="display:none;">
+  <header>🌱 Smart Plant Green House</header>
+
+  <div class="container">
+
     <div class="card">
-        <i class="bi bi-eye-fill icon-big"></i>
-        <h3>PIR Sensor</h3>
-        <p>Status: <span id="pir-status">Loading…</span></p>
+      <img class="icon" src="https://img.icons8.com/fluency/96/wet.png">
+      <h3>Kelembaban Tanah</h3>
+      <div class="value" id="soilValue">--%</div>
+      <div class="status" id="soilStatus">--</div>
     </div>
-    <br>
-    <button style="background:red" onclick="logout()">Logout</button>
+
+    <div class="card">
+      <img class="icon" src="https://img.icons8.com/fluency/96/sun.png">
+      <h3>Tingkat Cahaya</h3>
+      <div class="value" id="lightValue">--%</div>
+      <div class="status" id="lightStatus">--</div>
+    </div>
+
+    <div class="card">
+      <img class="icon" src="https://img.icons8.com/fluency/96/motion-detector.png">
+      <h3>Gerakan (PIR)</h3>
+      <div class="value" id="motionValue">--</div>
+      <div class="status" id="motionStatus">--</div>
+    </div>
+
+  </div>
+
+  <button id="logoutBtn">Logout</button>
 </div>
 
-<!-- FIREBASE -->
+<!-- FIREBASE SCRIPT -->
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-    // 🚀 PAKAI CONFIG KAMU (TIDAK DIUBAH)
-    const firebaseConfig = {
-      apiKey: "AIzaSyA8D-7d0go1eLJ-vGHd0hZD3gcf1kS29ig",
-      authDomain: "internetofthingsmikro.firebaseapp.com",
-      databaseURL: "https://internetofthingsmikro-default-rtdb.firebaseio.com",
-      projectId: "internetofthingsmikro",
-      storageBucket: "internetofthingsmikro.firebasestorage.app",
-      messagingSenderId: "216022709376",
-      appId: "1:216022709376:web:66c98abddaba295078a265"
-    };
+  // FIREBASE CONFIG MU (VALID)
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8D-7d0go1eLJ-vGHd0hZD3gcf1kS29ig",
+    authDomain: "internetofthingsmikro.firebaseapp.com",
+    databaseURL: "https://internetofthingsmikro-default-rtdb.firebaseio.com",
+    projectId: "internetofthingsmikro",
+    storageBucket: "internetofthingsmikro.firebasestorage.app",
+    messagingSenderId: "216022709376",
+    appId: "1:216022709376:web:66c98abddaba295078a265"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
 
-    // LOGIN
-    window.login = function () {
-        const email = document.getElementById("email").value;
-        const pass = document.getElementById("password").value;
+  const loginForm = document.getElementById("loginForm");
+  const dashboard = document.getElementById("dashboard");
 
-        signInWithEmailAndPassword(auth, email, pass)
-            .then(() => {
-                document.getElementById("login-page").style.display = "none";
-                document.getElementById("dashboard").style.display = "block";
+  // LOGIN
+  document.getElementById("loginBtn").addEventListener("click", () => {
+    const email = document.getElementById("email").value;
+    const pass = document.getElementById("password").value;
 
-                // Listen PIR sensor
-                const pirRef = ref(db, "greenhouse/sensors/motion");
-                onValue(pirRef, snapshot => {
-                    document.getElementById("pir-status").innerText =
-                        snapshot.val() ? "Terdeteksi" : "Tidak Ada Gerakan";
-                });
-            })
-            .catch(err => alert("Login gagal: " + err.message));
-    };
+    signInWithEmailAndPassword(auth, email, pass)
+      .then(() => {
+        loginForm.style.display = "none";
+        dashboard.style.display = "block";
+        listenToSensors();
+      })
+      .catch(err => alert("Login gagal: " + err.message));
+  });
 
-    // LOGOUT
-    window.logout = function () {
-        signOut(auth).then(() => location.reload());
-    };
+  // LOGOUT
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    signOut(auth).then(() => {
+      dashboard.style.display = "none";
+      loginForm.style.display = "block";
+    });
+  });
+
+  // 🔥 AMBIL DATA DARI FIREBASE REALTIME DATABASE
+  function listenToSensors() {
+    const sensorRef = ref(db, "greenhouse/sensors");
+
+    onValue(sensorRef, (snapshot) => {
+      const d = snapshot.val() || {};
+
+      updateSoil(d.soilMoisture);
+      updateLight(d.lightLevel);
+      updateMotion(d.motion);
+    });
+  }
+
+  // UPDATE CARD SOIL
+  function updateSoil(v) {
+    document.getElementById("soilValue").innerText = v + "%";
+    const status = document.getElementById("soilStatus");
+
+    if (v < 30) status.className = "status bad", status.innerText = "Kering";
+    else if (v < 70) status.className = "status warn", status.innerText = "Cukup";
+    else status.className = "status good", status.innerText = "Basah";
+  }
+
+  // UPDATE LIGHT
+  function updateLight(v) {
+    document.getElementById("lightValue").innerText = v + "%";
+    const status = document.getElementById("lightStatus");
+
+    if (v < 30) status.className = "status bad", status.innerText = "Redup";
+    else if (v < 70) status.className = "status warn", status.innerText = "Normal";
+    else status.className = "status good", status.innerText = "Terang";
+  }
+
+  // UPDATE MOTION
+  function updateMotion(v) {
+    document.getElementById("motionValue").innerText = v ? "Terdeteksi" : "Tidak Ada";
+    const status = document.getElementById("motionStatus");
+
+    if (v) status.className = "status bad", status.innerText = "Ada Gerakan";
+    else status.className = "status good", status.innerText = "Aman";
+  }
 </script>
 
 </body>
