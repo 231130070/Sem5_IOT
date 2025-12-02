@@ -2,145 +2,233 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IoT Dashboard</title>
+<title>Smart Plant Green House</title>
 
 <style>
-    body { margin: 0; font-family: Arial; background: #f1f1f1; }
-    .page { display: none; padding: 20px; }
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to bottom, #a5d6a7, #dcedc8);
+    margin: 0;
+    padding: 0;
+  }
 
-    /* LOGIN */
-    #loginPage {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-top: 80px;
-    }
-    #loginBox {
-        background: #fff;
-        padding: 20px;
-        width: 300px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px #ccc;
-    }
-    input {
-        width: 100%;
-        padding: 10px;
-        margin-top: 10px;
-        border-radius: 6px;
-        border: 1px solid #aaa;
-    }
-    button {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        background: #2b7cff;
-        color: #fff;
-        margin-top: 10px;
-        border-radius: 6px;
-        cursor: pointer;
-    }
+  header {
+    background: linear-gradient(to right, #66bb6a, #43a047);
+    padding: 30px;
+    text-align: center;
+    color: white;
+    font-size: 32px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
 
-    /* DASHBOARD */
-    #dashboardPage { padding: 20px; }
-    .card {
-        background: white;
-        padding: 15px;
-        margin-bottom: 15px;
-        border-radius: 10px;
-        box-shadow: 0 0 8px #ccc;
-    }
+  #loginForm {
+    text-align: center;
+    margin-top: 80px;
+  }
+
+  input {
+    padding: 10px;
+    margin: 8px;
+    width: 250px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    background: #2e7d32;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+  }
+
+  button:hover {
+    background: #1b5e20;
+  }
+
+  .container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: white;
+    padding: 25px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: 0.2s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.02);
+  }
+
+  .icon {
+    width: 50px;
+  }
+
+  .value {
+    font-size: 35px;
+    font-weight: bold;
+    color: #2e7d32;
+  }
+
+  .status {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 15px;
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+  }
+
+  .good { background: #66bb6a; }
+  .warn { background: #ffa726; }
+  .bad  { background: #ef5350; }
+
+  #logoutBtn {
+    margin: 30px auto;
+    display: block;
+  }
 </style>
-
 </head>
 <body>
 
 <!-- LOGIN PAGE -->
-<div id="loginPage" class="page" style="display:block;">
-    <div id="loginBox">
-        <h2>Login</h2>
-        <input type="text" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <button id="loginBtn">Login</button>
-        <p id="loginError" style="color:red;"></p>
-    </div>
+<div id="loginForm">
+  <h2>Smart Plant Green House</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button id="loginBtn">Login</button>
 </div>
 
-<!-- DASHBOARD PAGE -->
-<div id="dashboardPage" class="page">
-    <h2>IoT Sensor Dashboard</h2>
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none;">
+  <header>🌱 Smart Plant Green House</header>
+
+  <div class="container">
 
     <div class="card">
-        <h3>Soil Moisture:</h3>
-        <p id="soilValue">Loading...</p>
+      <img class="icon" src="https://img.icons8.com/fluency/96/wet.png">
+      <h3>Kelembaban Tanah</h3>
+      <div class="value" id="soilValue">--%</div>
+      <div class="status" id="soilStatus">--</div>
     </div>
 
     <div class="card">
-        <h3>Light Level:</h3>
-        <p id="lightValue">Loading...</p>
+      <img class="icon" src="https://img.icons8.com/fluency/96/sun.png">
+      <h3>Tingkat Cahaya</h3>
+      <div class="value" id="lightValue">--%</div>
+      <div class="status" id="lightStatus">--</div>
     </div>
 
     <div class="card">
-        <h3>PIR (Motion):</h3>
-        <p id="pirValue">Loading...</p>
+      <img class="icon" src="https://img.icons8.com/fluency/96/motion-sensor.png">
+      <h3>Gerakan (PIR)</h3>
+      <div class="value" id="motionValue">--</div>
+      <div class="status" id="motionStatus">--</div>
     </div>
+
+  </div>
+
+  <button id="logoutBtn">Logout</button>
 </div>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+<!-- FIREBASE SCRIPT -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-<script>
-// ===========================
-// FIREBASE CONFIG (FINAL, SUDAH SESUAI punyamu)
-// ===========================
-const firebaseConfig = {
-    apiKey: "AIzaSyBL3jO5vXz7Z6VAvzqVvpp0E9qcDJZr3z4",
+  // FIREBASE CONFIG MU (VALID)
+  const firebaseConfig = {
+    apiKey: "AIzaSyA8D-7d0go1eLJ-vGHd0hZD3gcf1kS29ig",
     authDomain: "internetofthingsmikro.firebaseapp.com",
     databaseURL: "https://internetofthingsmikro-default-rtdb.firebaseio.com",
     projectId: "internetofthingsmikro",
-    storageBucket: "internetofthingsmikro.appspot.com",
-    messagingSenderId: "78291597447",
-    appId: "1:78291597447:web:c2ea3a88e4d4e2a55f844b"
-};
+    storageBucket: "internetofthingsmikro.firebasestorage.app",
+    messagingSenderId: "216022709376",
+    appId: "1:216022709376:web:66c98abddaba295078a265"
+  };
 
-firebase.initializeApp(firebaseConfig);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
 
-// ===========================
-// LOGIN HANDLER
-// ===========================
-document.getElementById("loginBtn").addEventListener("click", function () {
+  const loginForm = document.getElementById("loginForm");
+  const dashboard = document.getElementById("dashboard");
+
+  // LOGIN
+  document.getElementById("loginBtn").addEventListener("click", () => {
     const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const pass = document.getElementById("password").value;
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(() => {
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("dashboardPage").style.display = "block";
-        loadSensorData();
-    })
-    .catch(err => {
-        document.getElementById("loginError").innerText = err.message;
+    signInWithEmailAndPassword(auth, email, pass)
+      .then(() => {
+        loginForm.style.display = "none";
+        dashboard.style.display = "block";
+        listenToSensors();
+      })
+      .catch(err => alert("Login gagal: " + err.message));
+  });
+
+  // LOGOUT
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    signOut(auth).then(() => {
+      dashboard.style.display = "none";
+      loginForm.style.display = "block";
     });
-});
+  });
 
-// ===========================
-// LOAD SENSOR DATA FROM REALTIME DB
-// ===========================
-function loadSensorData() {
-    const db = firebase.database().ref("sensor");
+  // 🔥 AMBIL DATA DARI FIREBASE REALTIME DATABASE
+  function listenToSensors() {
+    const sensorRef = ref(db, "greenhouse/sensors");
 
-    db.on("value", snapshot => {
-        const data = snapshot.val();
-        if (!data) return;
+    onValue(sensorRef, (snapshot) => {
+      const d = snapshot.val() || {};
 
-        document.getElementById("soilValue").innerText = data.soil + " %";
-        document.getElementById("lightValue").innerText = data.light + " lux";
-        document.getElementById("pirValue").innerText = 
-            data.pir == 1 ? "Motion Detected" : "No Motion";
+      updateSoil(d.soilMoisture);
+      updateLight(d.lightLevel);
+      updateMotion(d.motion);
     });
-}
+  }
+
+  // UPDATE CARD SOIL
+  function updateSoil(v) {
+    document.getElementById("soilValue").innerText = v + "%";
+    const status = document.getElementById("soilStatus");
+
+    if (v < 30) status.className = "status bad", status.innerText = "Kering";
+    else if (v < 70) status.className = "status warn", status.innerText = "Cukup";
+    else status.className = "status good", status.innerText = "Basah";
+  }
+
+  // UPDATE LIGHT
+  function updateLight(v) {
+    document.getElementById("lightValue").innerText = v + "%";
+    const status = document.getElementById("lightStatus");
+
+    if (v < 30) status.className = "status bad", status.innerText = "Redup";
+    else if (v < 70) status.className = "status warn", status.innerText = "Normal";
+    else status.className = "status good", status.innerText = "Terang";
+  }
+
+  // UPDATE MOTION
+  function updateMotion(v) {
+    document.getElementById("motionValue").innerText = v ? "Terdeteksi" : "Tidak Ada";
+    const status = document.getElementById("motionStatus");
+
+    if (v) status.className = "status bad", status.innerText = "Ada Gerakan";
+    else status.className = "status good", status.innerText = "Aman";
+  }
 </script>
 
 </body>
