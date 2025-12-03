@@ -25,15 +25,15 @@
 
   .login-box {
     background: white;
-    width: 330px;
-    padding: 35px;
+    width: 310px;         /* diperkecil sedikit */
+    padding: 30px;
     border-radius: 18px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.25);
     text-align: center;
   }
 
   .login-box h2 {
-    font-size: 26px;
+    font-size: 24px;      /* lebih kecil sedikit */
     margin-bottom: 20px;
     color: #2e7d32;
     font-weight: 600;
@@ -41,34 +41,35 @@
 
   .input-field {
     position: relative;
-    margin-bottom: 18px;
+    margin-bottom: 15px;
   }
 
+  /* ======= UKURAN BARU EMAIL & PASSWORD ======= */
   .input-field input {
     width: 100%;
-    padding: 12px 40px;
-    border-radius: 10px;
+    padding: 8px 36px;     /* lebih kecil */
+    border-radius: 8px;
     border: 2px solid #c8e6c9;
-    font-size: 15px;
+    font-size: 13px;       /* font lebih kecil */
   }
 
   .input-field img {
-    width: 22px;
+    width: 18px;           /* ikon diperkecil */
     position: absolute;
-    left: 10px;
+    left: 8px;             
     top: 50%;
     transform: translateY(-50%);
-    opacity: 0.7;
+    opacity: 0.75;
   }
 
   #loginBtn {
     width: 100%;
-    padding: 12px;
+    padding: 10px;         /* tombol lebih compact */
     background: #2e7d32;
     color: white;
     border: none;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
   }
 
@@ -77,7 +78,6 @@
   }
 
   /* ========================= DASHBOARD ========================= */
-
   header {
     background: linear-gradient(to right, #66bb6a, #43a047);
     padding: 30px;
@@ -204,7 +204,7 @@
   <button id="logoutBtn">Logout</button>
 </div>
 
-<!-- ========================= FIREBASE SCRIPT (TIDAK DIUBAH) ========================= -->
+<!-- ========================= FIREBASE SCRIPT ========================= -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
