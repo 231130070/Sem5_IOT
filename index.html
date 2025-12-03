@@ -20,61 +20,80 @@
     justify-content: center;
     align-items: center;
     background: linear-gradient(135deg, #a8e063, #56ab2f);
-    padding: 0;
   }
 
   .login-box {
     background: white;
-    width: 310px;         /* diperkecil sedikit */
-    padding: 30px;
-    border-radius: 18px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    width: 360px;
+    padding: 40px;
+    border-radius: 22px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
     text-align: center;
+    animation: fadeIn 0.4s ease;
   }
 
   .login-box h2 {
-    font-size: 24px;      /* lebih kecil sedikit */
-    margin-bottom: 20px;
+    font-size: 26px;
+    margin-bottom: 25px;
     color: #2e7d32;
     font-weight: 600;
   }
 
+  /* INPUT FIELD BARU */
   .input-field {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 18px;
   }
 
-  /* ======= UKURAN BARU EMAIL & PASSWORD ======= */
   .input-field input {
     width: 100%;
-    padding: 8px 36px;     /* lebih kecil */
-    border-radius: 8px;
+    padding: 12px 45px;
+    border-radius: 12px;
     border: 2px solid #c8e6c9;
-    font-size: 13px;       /* font lebih kecil */
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+    background: #f9fff9;
+    box-shadow: 0 0 5px rgba(0,0,0,0.08) inset;
+  }
+
+  .input-field input:focus {
+    border-color: #66bb6a;
+    box-shadow: 0 0 8px rgba(102,187,106,0.4);
   }
 
   .input-field img {
-    width: 18px;           /* ikon diperkecil */
+    width: 20px;
     position: absolute;
-    left: 8px;             
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    opacity: 0.75;
+    opacity: 0.8;
   }
 
+  /* BUTTON LOGIN */
   #loginBtn {
     width: 100%;
-    padding: 10px;         /* tombol lebih compact */
+    padding: 12px;
     background: #2e7d32;
     color: white;
     border: none;
-    border-radius: 10px;
-    font-size: 15px;
+    border-radius: 12px;
+    font-size: 16px;
     cursor: pointer;
+    margin-top: 5px;
+    transition: 0.2s;
   }
 
   #loginBtn:hover {
     background: #1b5e20;
+    transform: scale(1.03);
+  }
+
+  /* ANIMASI */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   /* ========================= DASHBOARD ========================= */
