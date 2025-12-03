@@ -19,76 +19,84 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #a8e063, #56ab2f);
+    background: linear-gradient(135deg, #9be27a, #4cae4f);
   }
 
   .login-box {
-    background: white;
-    width: 360px;
-    padding: 40px;
-    border-radius: 22px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    background: #ffffff;
+    width: 380px;
+    padding: 45px 35px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.18);
     text-align: center;
-    animation: fadeIn 0.4s ease;
+    animation: fadeIn 0.35s ease;
   }
 
-  .login-box h2 {
+  .login-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 28px;
     font-size: 26px;
-    margin-bottom: 25px;
-    color: #2e7d32;
     font-weight: 600;
+    color: #2e7d32;
   }
 
-  /* ========================= FIXED TEXTFIELD ========================= */
+  /* ========================= FIXED & BEAUTIFUL TEXTFIELD ========================= */
   .input-field {
     position: relative;
-    width: 100%;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
 
-  .input-field img {
+  .input-icon {
     width: 22px;
     position: absolute;
-    left: 14px;
     top: 50%;
+    left: 14px;
     transform: translateY(-50%);
-    opacity: 0.85;
+    opacity: 0.9;
   }
 
   .input-field input {
     width: 100%;
-    padding: 12px 15px 12px 48px;
+    padding: 13px 15px 13px 48px;
     border-radius: 12px;
-    border: 2px solid #c8e6c9;
-    font-size: 14px;
-    outline: none;
-    background: #f9fff9;
+    border: 2px solid #d3e9d5;
+    background: #f7fff7;
+    font-size: 15px;
+    transition: 0.22s ease;
     box-shadow: inset 0 0 5px rgba(0,0,0,0.08);
-    transition: 0.2s;
+  }
+
+  .input-field input:hover {
+    border-color: #81c784;
   }
 
   .input-field input:focus {
-    border-color: #66bb6a;
-    box-shadow: 0 0 8px rgba(102,187,106,0.4);
+    border-color: #2e7d32;
+    box-shadow: 0 0 8px rgba(46,125,50,0.35);
+    background: #ffffff;
   }
 
   /* BUTTON LOGIN */
   #loginBtn {
     width: 100%;
-    padding: 12px;
+    padding: 13px;
     background: #2e7d32;
     color: white;
     border: none;
     border-radius: 12px;
-    font-size: 16px;
+    font-size: 17px;
     cursor: pointer;
-    margin-top: 5px;
-    transition: 0.2s;
+    font-weight: 500;
+    margin-top: 10px;
+    transition: 0.22s ease;
   }
 
   #loginBtn:hover {
     background: #1b5e20;
-    transform: scale(1.03);
+    transform: translateY(-2px);
   }
 
   /* ANIMASI */
@@ -97,7 +105,7 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ========================= DASHBOARD ========================= */
+  /* ========================= DASHBOARD (ASLI PUNYAMU) ========================= */
   header {
     background: linear-gradient(to right, #66bb6a, #43a047);
     padding: 30px;
@@ -170,25 +178,30 @@
   }
 </style>
 </head>
+
 <body>
 
 <!-- ========================= LOGIN PAGE ========================= -->
 <div id="loginForm">
   <div class="login-box">
 
-    <h2>🌿 Login Green House</h2>
+    <div class="login-title">
+      <img src="https://img.icons8.com/emoji/48/seedling.png" width="30">
+      Login Green House
+    </div>
 
     <div class="input-field">
-      <img src="https://img.icons8.com/fluency/48/email.png">
+      <img class="input-icon" src="https://img.icons8.com/fluency/48/email.png">
       <input type="email" id="email" placeholder="Email">
     </div>
 
     <div class="input-field">
-      <img src="https://img.icons8.com/fluency/48/lock.png">
+      <img class="input-icon" src="https://img.icons8.com/fluency/48/lock.png">
       <input type="password" id="password" placeholder="Password">
     </div>
 
     <button id="loginBtn">Login</button>
+
   </div>
 </div>
 
@@ -298,7 +311,6 @@
   function updateMotion(v) {
     document.getElementById("motionValue").innerText = v ? "Terdeteksi" : "Tidak Ada";
     const status = document.getElementById("motionStatus");
-
     if (v) status.className = "status bad", status.innerText = "Ada Gerakan";
     else status.className = "status good", status.innerText = "Aman";
   }
