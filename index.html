@@ -7,10 +7,76 @@
 <style>
   body {
     font-family: "Poppins", sans-serif;
-    background: linear-gradient(to bottom, #a5d6a7, #dcedc8);
+    background: #e8f5e9;
     margin: 0;
     padding: 0;
   }
+
+  /* ========================= LOGIN PAGE BARU ========================= */
+  #loginForm {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #a8e063, #56ab2f);
+    padding: 0;
+  }
+
+  .login-box {
+    background: white;
+    width: 330px;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    text-align: center;
+  }
+
+  .login-box h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #2e7d32;
+    font-weight: 600;
+  }
+
+  .input-field {
+    position: relative;
+    margin-bottom: 18px;
+  }
+
+  .input-field input {
+    width: 100%;
+    padding: 12px 40px;
+    border-radius: 10px;
+    border: 2px solid #c8e6c9;
+    font-size: 15px;
+  }
+
+  .input-field img {
+    width: 22px;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+  }
+
+  #loginBtn {
+    width: 100%;
+    padding: 12px;
+    background: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  #loginBtn:hover {
+    background: #1b5e20;
+  }
+
+  /* ========================= DASHBOARD ========================= */
 
   header {
     background: linear-gradient(to right, #66bb6a, #43a047);
@@ -20,33 +86,6 @@
     font-size: 32px;
     font-weight: 600;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-
-  #loginForm {
-    text-align: center;
-    margin-top: 80px;
-  }
-
-  input {
-    padding: 10px;
-    margin: 8px;
-    width: 250px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-  }
-
-  button {
-    background: #2e7d32;
-    padding: 10px 20px;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    margin-top: 10px;
-  }
-
-  button:hover {
-    background: #1b5e20;
   }
 
   .container {
@@ -97,20 +136,43 @@
   #logoutBtn {
     margin: 30px auto;
     display: block;
+    padding: 12px 20px;
+    background: #c62828;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  #logoutBtn:hover {
+    background: #8e0000;
   }
 </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
+<!-- ========================= LOGIN PAGE ========================= -->
 <div id="loginForm">
-  <h2>Smart Plant Green House</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
+  <div class="login-box">
+
+    <h2>🌿 Login Green House</h2>
+
+    <div class="input-field">
+      <img src="https://img.icons8.com/fluency/48/email.png">
+      <input type="email" id="email" placeholder="Email">
+    </div>
+
+    <div class="input-field">
+      <img src="https://img.icons8.com/fluency/48/lock.png">
+      <input type="password" id="password" placeholder="Password">
+    </div>
+
+    <button id="loginBtn">Login</button>
+  </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- ========================= DASHBOARD ========================= -->
 <div id="dashboard" style="display:none;">
   <header>🌱 Smart Plant Green House</header>
 
@@ -142,13 +204,12 @@
   <button id="logoutBtn">Logout</button>
 </div>
 
-<!-- FIREBASE SCRIPT -->
+<!-- ========================= FIREBASE SCRIPT (TIDAK DIUBAH) ========================= -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
   import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-  // FIREBASE CONFIG MU (VALID)
   const firebaseConfig = {
     apiKey: "AIzaSyA8D-7d0go1eLJ-vGHd0hZD3gcf1kS29ig",
     authDomain: "internetofthingsmikro.firebaseapp.com",
@@ -166,7 +227,6 @@
   const loginForm = document.getElementById("loginForm");
   const dashboard = document.getElementById("dashboard");
 
-  // LOGIN
   document.getElementById("loginBtn").addEventListener("click", () => {
     const email = document.getElementById("email").value;
     const pass = document.getElementById("password").value;
@@ -180,28 +240,23 @@
       .catch(err => alert("Login gagal: " + err.message));
   });
 
-  // LOGOUT
   document.getElementById("logoutBtn").addEventListener("click", () => {
     signOut(auth).then(() => {
       dashboard.style.display = "none";
-      loginForm.style.display = "block";
+      loginForm.style.display = "flex";
     });
   });
 
-  // 🔥 AMBIL DATA DARI FIREBASE REALTIME DATABASE
   function listenToSensors() {
     const sensorRef = ref(db, "greenhouse/sensors");
-
     onValue(sensorRef, (snapshot) => {
       const d = snapshot.val() || {};
-
       updateSoil(d.soilMoisture);
       updateLight(d.lightLevel);
       updateMotion(d.motion);
     });
   }
 
-  // UPDATE CARD SOIL
   function updateSoil(v) {
     document.getElementById("soilValue").innerText = v + "%";
     const status = document.getElementById("soilStatus");
@@ -211,7 +266,6 @@
     else status.className = "status good", status.innerText = "Basah";
   }
 
-  // UPDATE LIGHT
   function updateLight(v) {
     document.getElementById("lightValue").innerText = v + "%";
     const status = document.getElementById("lightStatus");
@@ -221,7 +275,6 @@
     else status.className = "status good", status.innerText = "Terang";
   }
 
-  // UPDATE MOTION
   function updateMotion(v) {
     document.getElementById("motionValue").innerText = v ? "Terdeteksi" : "Tidak Ada";
     const status = document.getElementById("motionStatus");
